@@ -1,8 +1,8 @@
 const CONFIG = {
-  tokenAddress: "9rzRfWAFzjkV7HMm36M1ZSh7JUf4S8pw6UeZdPdLpump",
+  tokenAddress: "",
   pumpFunUrl: "",
-  twitter: "https://x.com/trumponsol_x",
-  telegram: "",
+  twitter: "https://x.com/vaginasol_x",
+  telegram: "https://t.me/vaginasol_tg",
 };
 
 function getPumpFunUrl() {
@@ -80,8 +80,59 @@ function initSocialLinks() {
   });
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function initReveal() {
+  if (!("IntersectionObserver" in window)) return;
+
+  document.documentElement.classList.add("js-reveal");
+
+  document.querySelectorAll("[data-reveal-group]").forEach((group) => {
+    [...group.children].forEach((child, i) => child.style.setProperty("--i", i));
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+
+  document.querySelectorAll("[data-reveal], [data-reveal-group]").forEach((el) => observer.observe(el));
+}
+
+function initSparks() {
+  const container = document.querySelector(".hero-sparks");
+  if (!container || prefersReducedMotion()) return;
+
+  const glyphs = ["(", ")", "(", ")", "·", "♡"];
+  const count = window.innerWidth < 720 ? 10 : 18;
+
+  for (let i = 0; i < count; i++) {
+    const spark = document.createElement("span");
+    const rand = (min, max) => min + Math.random() * (max - min);
+    spark.textContent = glyphs[i % glyphs.length];
+    spark.style.left = `${rand(0, 100)}%`;
+    spark.style.fontSize = `${rand(1, 2.6)}rem`;
+    spark.style.setProperty("--dur", `${rand(10, 20)}s`);
+    spark.style.setProperty("--delay", `${rand(-20, 0)}s`);
+    spark.style.setProperty("--dx", `${rand(-80, 80)}px`);
+    spark.style.setProperty("--spin", `${rand(-90, 90)}deg`);
+    spark.style.setProperty("--alpha", rand(0.25, 0.75).toFixed(2));
+    container.appendChild(spark);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initContract();
   initNav();
   initSocialLinks();
+  initReveal();
+  initSparks();
 });
