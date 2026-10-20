@@ -1,5 +1,5 @@
 const CONFIG = {
-  tokenAddress: "AVa5niwgDAjSkXJPZ5ATo1tFE8pZCY5EQ8nxh51spump",
+  tokenAddress: "",
   pumpFunUrl: "",
   twitter: "https://x.com/vaginaonx",
   telegram: "https://t.me/vaginaontg",
